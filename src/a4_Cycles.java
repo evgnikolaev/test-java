@@ -119,7 +119,7 @@ continue - переход к следующей итерации
 import java.util.Locale;
 import java.util.Scanner;
 
-public class a4_cikli {
+public class a4_Cycles {
 
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
