@@ -177,7 +177,7 @@ Arrays
                 }
 
  */
-
+package a1_Osnova;
 
 import java.util.Random;
 import java.util.Scanner;

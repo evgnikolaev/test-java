@@ -114,7 +114,7 @@ continue - переход к следующей итерации
                 System.out.println("sum= " + sum);
 
  */
-
+package a1_Osnova;
 
 import java.util.Locale;
 import java.util.Scanner;

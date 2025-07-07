@@ -60,9 +60,7 @@
 
 
  */
-
-
-import java.util.Scanner;
+package a1_Osnova;
 
 class a3_Vvod_vuvod {
     public static void main(String[] args) {

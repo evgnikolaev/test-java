@@ -74,9 +74,8 @@ StringBuffer и StringBuilder - ссылочный тип данных.
 
 
 
-
  */
-
+package a1_Osnova;
 
 import java.util.Scanner;
 
