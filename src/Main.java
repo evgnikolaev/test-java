@@ -1,13 +1,7 @@
 /*
 
-OOP
+Статические члены класса
 
-Обычно в классе присутствуют различные компоненты:
-- Поля
-- Методы
-- Конструкторы
-- Геттеры/Сеттеры
-- Переопределенные методы класса Object (toString(), equals()  и др.)
 
 
 
@@ -16,30 +10,12 @@ OOP
  */
 
 
+
 import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
