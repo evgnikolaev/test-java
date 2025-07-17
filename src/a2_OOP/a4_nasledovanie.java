@@ -118,9 +118,9 @@
 
 
  */
+package a2_OOP;
 
-
-class Main {
+class a4_nasledovanie {
     public static void main(String[] args) {
         PayerStudent person = new PayerStudent("Иванов", 8.4, 23, 3500);
 
@@ -158,6 +158,8 @@ class Main {
 }
 
 
+
+
 class Student {
     private String surname;
     private double averageMark;
@@ -183,6 +185,8 @@ class Student {
         return surname;
     }
 }
+
+
 
 
 class PayerStudent extends Student {
