@@ -212,11 +212,18 @@
 
 
 */
+package a2_OOP;
 
-import java.util.Locale;
-import java.util.Scanner;
-
-class Main {
+class a6_interface {
     public static void main(String[] args) {
+
     }
 }
+
+
+
+
+
+
+
+
