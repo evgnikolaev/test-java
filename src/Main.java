@@ -1,218 +1,225 @@
 /*
 
-Наследование:
-
-        Иерархия классов:
-            - класс предок - суперкласс
-            - потомок - подкласс
-            - класс может иметь только одного предка и любое количество потомков
+Интерфейсы
 
 
-
-        Отношение наследования "is a":
-            - Student is a Person       (ok - студент ЯВЛЯЕТСЯ человеком)
-            - Computer has a Keyboard   (no - клавиатура ЧАСТЬ компьютера, компьютер ИМЕЕТ клавиатуру)
-
-
-
-        Описание класса-наследника:
-            - Конструкторы не наследуются, поэтому подкласс должен иметь собственные конструктры
-            - Поля и методы суперкласса наследуются
-            - private-элементы суперкласса в наследнике не доступны, исмользуем геттеры-сеттеры
+    Интерфейсы:
+        - интерфейсы - это набор абстрактных методов и статических констант
+        - интерфейс - полностью статический класс
+        - если класс - это модель какого-то объекта, то интерфейс больше соответствует способностям  или ролям этого объекта
 
 
-                        [спецификаторы] class имя_класса extends имя_суперкласса {
-                            //описание класса
+    Переменные в интерфейсе - это константы
+        - неявно объявляются как public, final, static
+        - их нельзя изменить в классе, реализующим интерфейс
+        - они обязательно должны быть инициализированы
+
+
+
+                    public interface Moveable {
+                        void moveTo(String newAddress);
+                    }
+
+                    public class Skateboard implements Moveable {
+                       //реализация класса, в том числе методов интерфейса
+                    }
+
+
+
+
+
+Использование ссылок на интерфейсы
+
+        Movable item = new Car();
+        item.moveTo("home");        //вызывается метод moveTo() из класса Car
+
+
+
+        Movable[] garage = {new Car(), new Skateboard(), new Car()};
+        for (int i = 0; i < garage.length; i++) {
+            garage[i].moveTo("new place");
+        }
+
+
+
+
+
+
+Назначение интерфейсов
+
+    - интерфейсы, определяющие функциональность для классов
+    - интерфейсы, которые придают классу опреленные свойства (например, интерфейсы Clonable и Serialize)
+    - интерфейсы помогают в разработке больших проектов
+        поведение
+            ходить по карте
+            собирать предметы
+            выполнять квесты
+            драться
+            спасать
+            общаться
+
+        классы
+            рыцарь
+            король
+            принцесса
+            дракон
+
+
+
+
+
+В чем отличия абстрактного класса от интерфейса?
+
+    - Интерфейс описывает функциональность, которую могут реализовать различные, в том числе не родственные классы.
+    - Любой класс может унаследовать только от одного абстрактного класса, но реализовать любое количество интерфейсов.
+    - В абстрактных классах могут быть и обычные (не абстрактные методы), и поля.
+
+
+
+
+
+Константы в интерфейсах
+
+        public interface IConst {
+            int TAX_INDIVIDUAL = 13;        //налог физлица
+            int TAX_DEDUCTION_CHILD = 45;   //налоговый вычет на ребенка
+        }
+
+
+        public class Nalog implements IConst {
+            public int calculate() {
+                return (dohod - TAX_DEDUCTION_CHILD) * TAX_INDIVIDUAL / 100;            //обращение к константам из интерфейса
+            }
+        }
+
+
+
+                Интерфейс констант делать плохо.
+                Использование каких-то констант должно быть внутренним делом класса.
+                Лучше выделить под это отдельный класс.
+
+
+                public class TaxConst {
+                    public static final int TAX_INDIVIDUAL = 13;        //налог физлица
+                    public static final int TAX_DEDUCTION_CHILD = 45;   //налоговый вычет на ребенка
+
+                    private TaxConst() {            //приватный конструктор делает невозможным создание объектов извне
+                    }
+                }
+
+                public class Nalog {
+                    public int calculate() {
+                        return (dohod - TaxConst.TAX_DEDUCTION_CHILD) * TaxConst.TAX_INDIVIDUAL / 100;
+                    }
+                }
+
+
+
+
+
+Вложенные интерфейсы
+
+
+        public class ClassA {
+            interface InnerInterf {         //доступ по умолчанию внутри пакета
+                boolean isNegative(int x);
+            }
+        }
+
+
+        // Обращение будет таким ClassA.InnerInterf
+        public class ClassB implements ClassA.InnerInterf {
+            @Override
+            public boolean isNegative(int x) {
+                return x < 0 ? true:false;
+            }
+        }
+
+
+
+
+
+
+Новое в интерфейсах
+
+
+        Методы по умолчанию (это крайнее средство):
+        Позволяет расширять интерфейс, не ломаю уже написанный код
+
+                    public interface Moveable {
+                        void moveTo();
+
+                        default void carry(String thing) { //метод с реализацией по умолчанию
+                            System.out.println("Carry " + thing);
+                        }
+                    }
+
+
+                    Недостатки методов по умолчанию:
+
+                        -   Все усложняется, если некий класс реализует более одного (скажем, два) интерфейса,
+                            в которых одинаковые методы по умолчанию. Какой из методов унаследует класс? Ответ — никакой.
+                            В таком случае класс должен реализовать метод самостоятельно.
+
+                        -   Ситуация аналогична, если класс реализует два интерфейса с одинаковыми методами.
+                            Но при этом в одном интерфейсе  это метод по умолчанию, а в другом  является абстрактным.
+                            В этом случае также никакой реализации методов не наследуется.
+
+
+
+
+
+        Статические методы в интерфейсах
+        Они должны иметь реализацию и при этом их нельзя переопределить в классе, реализующем интерфейс!
+        Обычно используются как вспомогательные (для сортировки, проверок, логирования и т.п.)
+
+                    public interface Moveable {
+                        void moveTo();
+
+                        static void printAddress(String address) {          //статический метод
+                            System.out.println("Address = " + address);
                         }
 
-
-
-
-        Описание конструктора подкласса:
-            - первое действие - вызов конструктора суперкласса
-            - если явный вызов конструктора суперкласса отстутствует, автоматически вызывается его конструктор без параметров
-            - если конструктор суперклсаа требует указания параметров, он должен быть явным образом вызван в первой строчке
-              конструктора подкласса с помощью ключевого слова super()
-
-                    ключевое слово super():
-                        - вызов конструктора суперкласса
-                        - ссылка на любой член суперкласса:
-                            super.toString() - обращение к методу toString(), который определен в родительском классе
-
-
-                        public PayerStudent(String surname, double averageMark, int age, int cost) {
-                            super(surname, averageMark, age);
-                            this.cost = cost;
+                        default void carry(String thing) {
+                            System.out.println("Carry " + thing);
                         }
+                    }
 
-
-
-        Переопределение методов:
-            - метод из подкласса переопределяет метод суперкласса, если в нем описать метод с той же сигнатурой (имя метода + набор параметров)
-            - используем аннотацию @Override
-
-
-        Отличие переопределения от перегрузки:
-            - переопределение методов (override)  в подклассе выполняется, если сигнатуры одинаковы
-            - перегрузка методов (overload) выполняется, если имена одинаковые, а сигнатруы разные
+                    Moveable.printAddress("Minsk");
 
 
 
 
+        Приватные методы
+        Могут использоваться только внутри самого интерфейса
 
-Одновременное использование объетков суперкласса и подкласса (Динамическая диспетчеризация методов)
+                    public interface Moveable {
+                        void moveTo();
 
-        Иногда удобно оперировать объектами одной иерархии единообразно.
-        Cсылочной переменной суперкласса можно присвоить объект подкласса. Но не наоборот!
-        И мы можем вызывать методы, которые есть в родительском классе.
-
-
-                PayerStudent person = new PayerStudent("Иванов", 8.4, 23, 3500);
-                Student student = person;
-                student.calculateScholarship();     //верно (при этом сработает метод подкласса)
-                // student.payment();               //неверно!
-
-
-
-
-
-
-Проверка принадлежности классу:
-
-        person instanceof Student  - истинно, если объект person принадлежит классу Student или его наследнику
-                                    (или реализует интерфейс Student – об интерфейсах будет в курсе дальше).
-
-
-                         for (int i = 0; i < gruppa.length; i++) {
-                            if (gruppa[i] instanceof PayerStudent) {
-                                System.out.println(gruppa[i]);
+                        static void printAddress(String address) {              //статический метод
+                            if (isNotEmpty(address)) {
+                                System.out.println("Address = " + address);
                             }
                         }
 
-
-
-
-
-        Нужно иметь ввиду, что проверка принадлежности классу-наследнику не дает автоматически возможности
-        вызывать от имени этого объекта метод из подкласса (если ссылка осталась типа суперкласса).
-        Чтобы вызывать специфические методы наследника, нужно сначала выполнить преобразование к его типу:
-
-                        System.out.println("Оплата за обучение");
-                        for (int i = 0; i < gruppa.length; i++) {
-                            if (gruppa[i] instanceof PayerStudent) {
-                                PayerStudent item = (PayerStudent) gruppa[i]; //преобразование к типу подкласса
-                                System.out.println(item.getSurname() + ": " + item.payment());
-                            }
+                        private static boolean isNotEmpty(String text) {        //статический приватный метод в интерфейсе
+                            return text.isEmpty() ? false : true;
                         }
+                    }
 
 
-        gruppa[i] instanceof PayerStudent item  - или преобразование можно сделать короче
 
 
-                        System.out.println("Оплата за обучение");
-                        for (int i = 0; i < gruppa.length; i++) {
-                            if (gruppa[i] instanceof PayerStudent item) {
-                                System.out.println(item.getSurname() + ": " + item.payment());
-                            }
-                        }
 
+*/
 
- */
-
+import java.util.Scanner;
 
 class Main {
     public static void main(String[] args) {
-        PayerStudent person = new PayerStudent("Иванов", 8.4, 23, 3500);
-
-        // Cсылочной переменной суперкласса можно присвоить объект подкласса. Но не наоборот!
-        // И мы можем вызывать методы, которые есть в родительском классе.
-        Student student = person;
-        student.calculateScholarship();     //верно (при этом сработает метод подкласса)
-        // student.payment();               //неверно!
 
 
-        Student[] gruppa = new Student[3];
-        gruppa[0] = new Student("Смирнов", 6.5, 20);
-        gruppa[1] = new PayerStudent("Петров", 9.4, 22, 4500); //студент-платник в массиве студентов
-        gruppa[2] = new Student("Иволгина", 8.5, 28);
-        for (int i = 0; i < gruppa.length; i++) {
-            System.out.println(gruppa[i].getSurname() + " стипендия = " + gruppa[i].calculateScholarship());
-        }
-
-
-        /*
-            Смирнов стипендия = 132
-            Петров стипендия = 0
-            Иволгина стипендия = 154
-        */
-
-
-        // Проверка принадлежности классу
-        System.out.println("Оплата за обучение");
-        for (int i = 0; i < gruppa.length; i++) {
-            if (gruppa[i] instanceof PayerStudent item) {
-                System.out.println(item.getSurname() + ": " + item.payment());
-            }
-        }
     }
 }
 
-
-class Student {
-    private String surname;
-    private double averageMark;
-    private int age;
-    private static int baseScholarship = 110;
-
-    public Student(String surname, double averageMark, int age) {
-        this.surname = surname;
-        this.averageMark = averageMark;
-        this.age = age;
-    }
-
-    public int calculateScholarship() {
-        return (int) (baseScholarship * 1.4);
-    }
-
-    @Override
-    public String toString() {
-        return surname + ";" + averageMark + ";" + age;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-}
-
-
-class PayerStudent extends Student {
-    private int cost;
-
-    public PayerStudent(String surname, double averageMark, int age, int cost) {
-        super(surname, averageMark, age);
-        this.cost = cost;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public int payment() { //расчет платежа с учетом успеваемости
-        return (int) (cost * 0.85);
-    }
-
-    @Override
-    public int calculateScholarship() { //переопределяем метод расчета стипендии
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + ";" + payment();
-    }
-}
 
