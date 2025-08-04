@@ -214,11 +214,111 @@
 */
 package a2_OOP;
 
+import java.util.Locale;
+import java.util.Scanner;
+
 class a6_interface {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Locale.setDefault(Locale.US);
+        scanner.useLocale(Locale.US);
 
+
+        Transport[] pets = new Transport[scanner.nextInt()];
+        for (int i = 0; i < pets.length; i++) {
+            int type = scanner.nextInt();
+            if (type == 1) {
+                pets[i] = new Lorry(scanner.nextDouble());
+            }
+            if (type == 2) {
+                pets[i] = new Ship(scanner.nextDouble());
+            }
+        }
+
+        double ves = scanner.nextDouble();
+
+        for (int i = 0; i < pets.length; i++) {
+            if (pets[i].canCarry(ves)) {
+                pets[i].add(ves);
+            }
+            System.out.println(pets[i]);
+        }
     }
 }
+
+interface Transport {
+    boolean canCarry(double weight);
+
+    void add(double weight);
+
+    double getTotalWeight();
+}
+
+class Lorry implements Transport {
+    private double maxWeight;
+    private double totalWeight = 0.0;
+
+    public Lorry(double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    @Override
+    public boolean canCarry(double weight) {
+        return maxWeight > weight;
+    }
+
+    @Override
+    public void add(double weight) {
+        totalWeight += weight;
+    }
+
+    @Override
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    @Override
+    public String toString() {
+        return "Lorry{maxWeight=" + maxWeight + ", totalWeight=" + getTotalWeight() + "}";
+    }
+}
+
+
+class Ship implements Transport {
+    private double maxWeight;
+    private double totalWeight = 0.0;
+
+    public Ship(double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    @Override
+    public boolean canCarry(double weight) {
+        return maxWeight > weight;
+    }
+
+    @Override
+    public void add(double weight) {
+        totalWeight += weight;
+    }
+
+    @Override
+    public double getTotalWeight() {
+        return totalWeight;
+    }
+
+    @Override
+    public String toString() {
+        return "Ship{maxWeight=" + maxWeight + ", totalWeight=" + getTotalWeight() + "}";
+    }
+}
+
+
+
+
+
+
+
 
 
 
