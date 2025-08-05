@@ -53,14 +53,14 @@ https://stepik.org/lesson/1094582/step/15?unit=1105343
 
 
 */
+package a2_OOP;
 
-
-class Main {
+class a9_throw {
     public static void main(String[] args) {
         try {
-            Student student1 = new Student("Иванов", 7.8, 22);
+            Studentic student1 = new Studentic("Иванов", 7.8, 22);
             System.out.println("Первый объект создан успешно");
-            Student student2 = new Student("Петров", 8.9, -5);
+            Studentic student2 = new Studentic("Петров", 8.9, -5);
             System.out.println("Второй объект создан успешно");
         } catch (StudentException ex) {
             System.out.println("Неверные данные студента! " + ex.getMessage());
@@ -69,13 +69,13 @@ class Main {
 }
 
 
-class Student {
+class Studentic {
     private String surname;
     private double averageMark;
     private int age;
 
     // так как выбрасываем исключение в методе, то указываем throws StudentException
-    public Student(String surname, double averageMark, int age) throws StudentException {
+    public Studentic(String surname, double averageMark, int age) throws StudentException {
         this.surname = surname;
         this.averageMark = averageMark;
         if (age < 0) throw new StudentException("Неверный возраст"); // выбрасываем исключение
