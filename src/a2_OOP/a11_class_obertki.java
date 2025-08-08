@@ -144,10 +144,10 @@
 
 
 */
+package a2_OOP;
 
 
-
-class Main {
+class a11_class_obertki {
     public static void main(String[] args) {
 
 
