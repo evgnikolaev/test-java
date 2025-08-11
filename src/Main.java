@@ -1,146 +1,210 @@
 /*
 
-Классы-обертки (wrapper classes)
+Вложенные классы
+https://stepik.org/lesson/1080721/step/1?unit=1090980
 
-    Для всех примитивных типов в Java существуют соответствующие классы-обертки.
 
-            byte	    Byte        (наследник Number)
-            char	    Character
-            short	    Short       (наследник Number)
-            int	        Integer     (наследник Number)
-            long	    Long        (наследник Number)
-            float	    Float
-            double	    Double
-            boolean	    Boolean
+        Существует четыре базовых типа вложенных классов в Java:
+            1. Nested Inner classes (вложенные внутренние классы)
+            2. Static Nested classes  (статические вложенные классы)
+            3. Method -local Inner classes (локальные вложенные классы)
+            4. Anonymous Inner classes (анонимные классы)
 
 
 
-Статические методы классов-оберток
-
-        valueOf()
-            Integer i4 = Integer.valueOf("5");
-            Integer i5 = Integer.valueOf(7);
-            Float f1 = Float.valueOf(1.3f);
-
-
-        parseXXX()
-            int m = Integer.parseInt("123");
-            boolean b1 = Boolean.parseBoolean("TRUE");
-
-
-        toBinaryString()
-            String binaryString = Integer.toBinaryString(21);   // 10101 - в двоичный формат
-
-
-        toHexString()
-            String hexString = Integer.toHexString(255);        // ff - в шестнадц. формат
-            String hexString2 = Double.toHexString(3.14);
-
-
-        Класс-обертка  Character
-            boolean isDigit1 = Character.isDigit('3');          // является ли символ цифрой?
-            boolean isUpper = Character.isUpperCase('b');       // в верхнем регистре?
+        1. Nested Inner classes (вложенные внутренние классы)
+            - всегда неявно связан с объектом своего внешнего класса
+            - может получить доступ к любому приватному полю или методу экземпляра внешнего класса
+            - не мог содержать в себе статических методов или статических полей
+            - может иметь любой модификатор доступа
+            - также вложенными могут быть интерфейсы
 
 
 
+                        public class Student {
+                            private String name;
+
+                            public Student(String name) {
+                                this.name = name;
+                            }
+
+                            public class Account { //nested inner class
+                                private String login;
+                                private String password;
+
+                                public Account(String login, String password) {
+                                    this.login = login;
+                                    this.password = password;
+                                }
+
+                                public void show() {
+                                    System.out.println("Студент: " + name); //доступ к приватному полю внешнего класса
+                                    System.out.println("Логин: " + login);
+                                    System.out.println("Пароль: " + password);
+                                }
+                            }
+                        }
 
 
 
+                        public class Main {
+                            public static void main(String[] args) {
+                                Student person = new Student("Иванов");  //создаем объект внешнего класса
 
-Автоматическая упаковка и распаковка
-
-
-
-        Раньше для получения примитивного значения из объекта-обертки  использовали:
-        intValue(), doubleValue(), charValue() ...
-
-                Integer example = Integer.valueOf("5");
-                int value = example.intValue();
-
-
-
-        Автоматическая упаковка (autoboxing)
-        - это механизм неявного создания (без использования оператора new) объекта класса-обертки.
-
-                Integer i = 5;      //числовой литерал автоматически преобразуется в объект
-                Boolean b = true;   //булевский литерал неявно преобразуется в объект
-
-
-        Автоматическая распаковка (unboxing)
-        - это механизм неявного преобразования объекта типа-обертки в примитивный тип.
-
-                Integer n = new Integer(5);
-                int num = n;                            //автоматическая распаковка
-
-
-
-        Автоматическая упаковка и распаковка может происходить в операторе присваивания, при передаче в метод, а также в выражениях.
-
-                Double x = Double.valueOf(3.14);
-                System.out.println(Math.sin(x));        //передали в метода класс-обертку
-
-
-        Автоматической распаковки в выражении:
-
-                Integer i1 = Integer.valueOf("15");
-                int m = 25 + i1;                        //распаковка
-
-
-                Integer k1 = 34;                        //автоматическая упаковка
-                Integer k2 = 18;
-                System.out.println(k1 > k2);            //автоматическая распаковка
-
-
-
-Автоматическая упаковка и распаковка упрощают код, но могут привести к ряду ошибок
-
-                Integer number = null;
-                int j = number;                         // возникнет исключение NullPointerException
-
-
-            Проверка на равенство, неравенство не подразумевает распаковки!
-
-                Integer num1 = new Integer(123);
-                Integer num2 = new Integer(123);
-                System.out.println(num2 == num1);       //false, сравниваются ссылки
-
-
-                Integer num3 = 123;
-                Integer num4 = 123;
-                System.out.println(num3 == num4);       // true, тут тоже происходи кеширование
-                                                        // аналогично примеру ниже
-
-                Integer num5 = Integer.valueOf(123);    // valueOf() кеширует значение от -128 до 127
-                Integer num6 = Integer.valueOf(123);    // (верхнюю границу можно изменять, но по умолчанию она такая).
-                System.out.println(num5 == num6);       // true, то есть num6 - закешируется.
-                                                        // если передать например 150, то уже результат будет false
-
-
-
-            Автоупаковка не работает для массивов
-
-                public static void print(int[] array) {
-                    for (int item : array) {
-                        System.out.print(item + " ");
-                    }
-                    System.out.println();
-                }
-
-                Integer[] mas = {3, 6, 8};
-                print(mas);                             // ошибка!
-                                                        // Массив Integer[] не преобразуется в массив int[]
+                                //объект внутреннего класса создается от имени объекта  внешнего класса
+                                Student.Account account = person.new Account("ivanov", "123");
+                                account.show();
+                            }
+                        }
 
 
 
 
-Применение автоупаковки и автораспаковки
-        Например, в колллекции (списки, множества и т.п.) мы можем помещать только объекты классов,
-        а примитивные переменные не можем. Поэтому, если нужно, например, создать список из целых чисел,
-        то мы объявляем список из Integer:
 
-        ArrayList<Integer> list = new ArrayList<>();
-        А при добавлении числа происходит автоматическая упаковка int в Integer:
-        list.add(2);
+
+
+
+       2. Static Nested classes
+            - имеют доступ к статическим полям внешнего класса (в том числе приватным)
+            - не имеют доступа к полям экземпляра
+
+
+
+                        public class Student {
+                            private String name;
+                            private static int baseScolarship = 200;
+
+                            public Student(String name) {
+                                this.name = name;
+                            }
+
+                            public static class Scolarship {
+                                public void increaseBaseScolarship(int procent) {
+                                    baseScolarship += baseScolarship * procent / 100; //доступ к статическому полю
+                                    //System.out.println(name); //нет доступа к полю экземпляра
+                                }
+                            }
+                        }
+
+
+
+                        public class Main {
+                            public static void main(String[] args) {
+                                Student.Scolarship money = new Student.Scolarship(); //не нужен объект внешнего класса
+                                money.increaseBaseScolarship(20);
+                            }
+                        }
+
+
+
+
+
+
+
+
+
+        3. Method Local Inner classes
+            - имеет доступ к переменным внешнего класса (как к статическим, так и переменным экземпляра)
+            - меет доступ и к локальным переменным этого метода, если они фактически являются константами
+
+
+
+
+                        public class Student {
+                            private String name;
+
+                            public Student(String name) {
+                                this.name = name;
+                            }
+
+                            public void createAccount(String login, String password) {
+
+                                class Account {             //класс внутри метода
+                                    private String log;     //имя должно отличаться от локальной переменной
+                                    private String passw;
+
+                                    public Account() {
+                                        //login = "petrov";  //локальную переменную в методе не менять
+                                        this.log = login;    //доступ к локальным переменным метода
+                                        this.passw = password;
+                                    }
+
+                                    public void show() {
+                                        System.out.println("name = " + name); //доступ к полю экземпляра внешнего класса
+                                        System.out.println("login = " + log);
+                                        System.out.println("password = " + passw);
+                                    }
+                                }
+
+                                //операторы метода
+                                Account account = new Account();
+                                account.show();
+                            }
+
+                        }
+
+
+
+                        public class Main {
+                            public static void main(String[] args) {
+                                Student person = new Student("Иванов");
+                                person.createAccount("ivanov", "123");
+                            }
+                        }
+
+
+
+
+         4. Anonymous Inner classes (анонимные классы)
+            - объявляются без указания имени класса
+            - могут быть созданы двумя путями:
+                    - как наследник определённого класса
+                    - как реализация какого-то интерфейса
+            - может либо реализовать интерфейс (только один!), либо расширить класс (но не одновременно)
+
+
+
+                        //пример - как наследника класса
+                        public class Demo {
+                            public void show() {
+                                System.out.println("Метод суперкласса");
+                            }
+                        }
+
+                        public class Main {
+                            public static void main(String[] args) {
+                                Demo obj = new Demo() {
+                                    @Override
+                                    public void show() {
+                                        System.out.println("Метод анонимного класса");
+                                    }
+                                };
+                                obj.show();
+                            }
+                        }
+
+
+
+
+
+                        //пример - как реализация интерфейса
+                        public interface DemoInterf {
+                            void show();
+                        }
+
+                        public class Main {
+                            public static void main(String[] args) {
+                                DemoInterf item = new DemoInterf() {
+                                    @Override
+                                    public void show() {
+                                        System.out.println("Метод анонимного класса");
+                                    }
+                                };
+                                item.show();
+                            }
+                        }
+
+
 
 
 */
@@ -153,3 +217,19 @@ class Main {
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
