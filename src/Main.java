@@ -2,21 +2,21 @@
 
 Дженерики
 
+
+
+
 */
 
-
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
-class Main {
+public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Locale.setDefault(Locale.US);
-        scanner.useLocale(Locale.US);
+        Scanner scan = new Scanner(System.in);
 
     }
 }
-
 
 
 
