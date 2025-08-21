@@ -88,11 +88,12 @@ class StringIterable implements Iterable<Character> {
 
                     public StringIterable(String str) {
                         this.str = str;
-                        count = str.length() - 1;
+                        //count = str.length() - 1;
                     }
 
                     @Override
                     public Iterator<Character> iterator() {
+                        count = str.length() - 1;
                         return this;
                     }
 
