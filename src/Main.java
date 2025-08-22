@@ -4,16 +4,21 @@
 Паттерны проектирования
 
 
+    Паттерн "Декоратор"
 
 
+        Когда очень много различных дополнений к существующим классам.
+        Пример: Сеть кофеен
+        К кофе можно заказать различные дополнения (пенка, шоколад и т.д.),
 
 
 */
 
 
-public class Main {
-    public static void main(String[] args) {
+import java.util.ArrayList;
+import java.util.Scanner;
 
+class Main {
+    public static void main(String[] args) {
     }
 }
-
