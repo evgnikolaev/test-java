@@ -1,6 +1,6 @@
 package a2_OOP.z20_decorator;
 
-// кофе темной обжарки - основной класс
+// кофе темной обжарки - основной класс, их несколько, опишем только один
 
 public class DarkRoast extends Beverage {
 
