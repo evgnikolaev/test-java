@@ -6,7 +6,6 @@ public class DarkRoast extends Beverage {
 
     public DarkRoast() {
         super("Dark Roast Coffee");
-
     }
 
     @Override
